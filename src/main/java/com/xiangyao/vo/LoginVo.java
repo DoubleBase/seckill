@@ -27,7 +27,6 @@ public class LoginVo {
     @Length(min = 32)
     private String password;
 
-
     @Override
     public String toString() {
         return "LoginVo{" +

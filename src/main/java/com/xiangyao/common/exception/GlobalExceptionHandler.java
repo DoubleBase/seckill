@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * @author xianggua
- * @description 拦截异常
+ * @description 全局拦截异常
  * @date 2019-7-3 23:20
  * @since 1.0
  */

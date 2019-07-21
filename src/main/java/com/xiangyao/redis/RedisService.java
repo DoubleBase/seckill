@@ -115,6 +115,25 @@ public class RedisService {
     }
 
     /**
+     * 减少值
+     * @param keyPrefix key前缀
+     * @param key key
+     * @return
+     */
+    public Long decr(KeyPrefix keyPrefix,String key){
+        Jedis jedis = null;
+        try{
+            jedis = jedisPool.getResource();
+            //生成真正的key
+            String realKey = keyPrefix.getPrefix() + key;
+            return jedis.decr(realKey);
+        }finally {
+            close(jedis);
+        }
+    }
+
+
+    /**
      * 关闭jedis
      *
      * @param jedis

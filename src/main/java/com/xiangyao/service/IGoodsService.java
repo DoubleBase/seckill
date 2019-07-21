@@ -19,4 +19,6 @@ public interface IGoodsService {
 
     List<GoodsVo> listGoods();
 
+    GoodsVo getGoodsVoByGoodsId(int goodsId);
+
 }

@@ -17,5 +17,6 @@ public class GoodsKey extends BaseKeyPrefix {
 
     public static GoodsKey goodListKey = new GoodsKey(TimeUtil.MINUTE,"gl");
     public static GoodsKey goodDetailKey = new GoodsKey(TimeUtil.MINUTE,"gd");
+    public static GoodsKey goodStockKey = new GoodsKey(0,"gs");
 
 }

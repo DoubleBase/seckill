@@ -38,5 +38,10 @@ public class GoodsServiceImpl implements IGoodsService {
         return goodsMapper.listGoods();
     }
 
+    @Override
+    public GoodsVo getGoodsVoByGoodsId(int goodsId) {
+        return goodsMapper.getGoodsVoByGoodsId(goodsId);
+    }
+
 
 }
