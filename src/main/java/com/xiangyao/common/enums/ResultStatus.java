@@ -21,6 +21,8 @@ public enum ResultStatus {
     CODE_FAILED(20003,"验证码不一致"),
     MOBILE_NOT_EXIST(20004,"手机号码不存在"),
     PASSWORD_ERROR(20005,"密码错误"),
+    MOBILE_EXIST(20006,"手机号码已存在"),
+    SESSION_ERROR(20007,"会话不存在或已失效"),
 
     //秒杀信息
     VERIFY_CODE_CHECK_FAILED(50001,"验证码校验失败"),

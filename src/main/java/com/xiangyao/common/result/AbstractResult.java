@@ -28,11 +28,15 @@ public class AbstractResult {
     }
 
     public AbstractResult withError(ResultStatus status) {
-        return new AbstractResult(status);
+        this.code = status.getCode();
+        this.message = status.getMsg();
+        return this;
     }
 
     public AbstractResult withError(String message) {
-        return new AbstractResult(ResultStatus.SYSTEM_ERROR,message);
+        this.code = ResultStatus.SYSTEM_ERROR.getCode();
+        this.message = message;
+        return this;
     }
 
     public AbstractResult withError(int code, String message) {

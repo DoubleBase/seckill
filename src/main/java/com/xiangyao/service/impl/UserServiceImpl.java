@@ -89,7 +89,8 @@ public class UserServiceImpl implements IUserService {
     public boolean register(String username, String password, String salt) {
         User user = new User();
         user.setNickname(username);
-        user.setPassword(password);
+        String dbPassword = MD5Util.formPassToDBPass(password,salt);
+        user.setPassword(dbPassword);
         user.setRegisterDate(new Date());
         user.setSalt(salt);
 
@@ -151,6 +152,7 @@ public class UserServiceImpl implements IUserService {
         response.addCookie(cookie);
     }
 
+    @Override
     public User getUserByNickName(String nickName) {
         //从缓存中获取
         User user = redisService.get(UserKey.nickNameKey, "" + nickName, User.class);

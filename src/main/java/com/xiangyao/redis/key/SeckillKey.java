@@ -14,5 +14,6 @@ public class SeckillKey extends BaseKeyPrefix {
 
     public static SeckillKey seckillVerifyCodeRegister = new SeckillKey(300, "register");
     public static SeckillKey seckillVerifyCode = new SeckillKey(300, "vc");
+    public static SeckillKey isGoodsOver = new SeckillKey(0,"go");
 
 }

@@ -1,11 +1,10 @@
 package com.xiangyao.vo;
 
+import com.xiangyao.domains.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * @author xianggua
@@ -21,5 +20,6 @@ public class GoodsDetailVo {
     private int sekillStatus;
     private int remainSeconds;
     private GoodsVo goods;
+    private User user;
 
 }

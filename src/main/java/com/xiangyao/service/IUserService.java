@@ -1,5 +1,6 @@
 package com.xiangyao.service;
 
+import com.xiangyao.domains.User;
 import com.xiangyao.vo.LoginVo;
 
 import java.awt.image.BufferedImage;
@@ -19,5 +20,7 @@ public interface IUserService {
     boolean register(String username, String password, String salt);
 
     boolean login(LoginVo loginVo);
+
+    User getUserByNickName(String nickname);
 
 }

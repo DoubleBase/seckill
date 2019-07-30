@@ -5,6 +5,8 @@ import com.xiangyao.common.enums.ResultStatus;
 import com.xiangyao.common.result.ActionResult;
 import com.xiangyao.domains.Order;
 import com.xiangyao.domains.User;
+import com.xiangyao.rabbitmq.RabbitMqSender;
+import com.xiangyao.rabbitmq.SeckillMessage;
 import com.xiangyao.redis.RedisService;
 import com.xiangyao.redis.key.GoodsKey;
 import com.xiangyao.service.IGoodsService;
@@ -48,6 +50,8 @@ public class SeckillAction extends BaseAction implements InitializingBean {
     private RedisService redisService;
     @Resource
     private IGoodsService goodsService;
+    @Resource
+    private RabbitMqSender rabbitMqSender;
 
     private HashMap<Long, Boolean> localOverMap = new HashMap<>();
 
@@ -62,10 +66,14 @@ public class SeckillAction extends BaseAction implements InitializingBean {
      */
     @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
     @ResponseBody
-    public ActionResult<String> verifyCode(int goodsId) {
+    public ActionResult<String> verifyCode(User user, int goodsId) {
         ActionResult<String> result = ActionResult.build();
-        BufferedImage image = seckillService.createVerifyCode(goodsId);
+        if (user == null) {
+            result.withError(ResultStatus.SESSION_ERROR);
+            return result;
+        }
         try {
+            BufferedImage image = seckillService.createVerifyCode(user, goodsId);
             OutputStream out = getServletResponse().getOutputStream();
             ImageIO.write(image, "JPEG", out);
             out.flush();
@@ -91,7 +99,7 @@ public class SeckillAction extends BaseAction implements InitializingBean {
     public ActionResult<Integer> doSeckill(User user, int verifyCode, long goodsId) {
         ActionResult<Integer> result = ActionResult.build();
         //0.校验验证码是否正确
-        boolean check = seckillService.checkVerifyCode(verifyCode, goodsId);
+        boolean check = seckillService.checkVerifyCode(user, verifyCode, goodsId);
         //验证码校验失败,则返回错误信息
         if (!check) {
             result.withError(ResultStatus.VERIFY_CODE_CHECK_FAILED);
@@ -117,8 +125,11 @@ public class SeckillAction extends BaseAction implements InitializingBean {
             result.withError(ResultStatus.SECKILL_OVER);
             return result;
         }
-        //TODO 发送MQ消息,生成订单
-
+        //发送MQ消息,生成订单
+        SeckillMessage seckillMessage = new SeckillMessage();
+        seckillMessage.setUser(user);
+        seckillMessage.setGoodsId(goodsId);
+        rabbitMqSender.sendSeckillMessage(seckillMessage);
         return result;
     }
 

@@ -1,8 +1,7 @@
 package com.xiangyao.service.impl;
 
-import com.xiangyao.common.enums.ResultStatus;
-import com.xiangyao.common.exception.GlobalException;
 import com.xiangyao.domains.Goods;
+import com.xiangyao.domains.SeckillGoods;
 import com.xiangyao.mapper.GoodsMapper;
 import com.xiangyao.service.IGoodsService;
 import com.xiangyao.vo.GoodsVo;
@@ -39,9 +38,16 @@ public class GoodsServiceImpl implements IGoodsService {
     }
 
     @Override
-    public GoodsVo getGoodsVoByGoodsId(int goodsId) {
+    public GoodsVo getGoodsVoByGoodsId(long goodsId) {
         return goodsMapper.getGoodsVoByGoodsId(goodsId);
     }
 
+    @Override
+    public boolean reduceStock(GoodsVo goodsVo) {
+        SeckillGoods goods = new SeckillGoods();
+        goods.setGoodsId(goodsVo.getId());
+        int ret = goodsMapper.reduceStock(goods);
+        return ret > 0;
+    }
 
 }

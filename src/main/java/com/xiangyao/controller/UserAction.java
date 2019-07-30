@@ -3,7 +3,7 @@ package com.xiangyao.controller;
 import com.xiangyao.common.action.BaseAction;
 import com.xiangyao.common.enums.ResultStatus;
 import com.xiangyao.common.result.ActionResult;
-import com.xiangyao.service.ISeckillService;
+import com.xiangyao.domains.User;
 import com.xiangyao.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,6 +95,12 @@ public class UserAction extends BaseAction {
         boolean check = userService.checkVerifyCodeRegister(Integer.valueOf(verifyCode));
         if (!check) {
             result.withError(ResultStatus.VERIFY_CODE_CHECK_FAILED);
+            return result;
+        }
+        //查询相同手机号码是否已存在
+        User dbUser = userService.getUserByNickName(username);
+        if (dbUser != null) {
+            result.withError(ResultStatus.MOBILE_EXIST);
             return result;
         }
         boolean register = userService.register(username, password, salt);

@@ -3,6 +3,7 @@ package com.xiangyao.controller;
 import com.xiangyao.common.action.BaseAction;
 import com.xiangyao.common.enums.SeckillStatus;
 import com.xiangyao.common.result.ActionResult;
+import com.xiangyao.domains.User;
 import com.xiangyao.redis.key.GoodsKey;
 import com.xiangyao.service.IGoodsService;
 import com.xiangyao.vo.GoodsDetailVo;
@@ -40,9 +41,10 @@ public class GoodsAction extends BaseAction {
      */
     @RequestMapping(value = "/listGoods", produces = "text/html")
     @ResponseBody
-    public String listGoods(Model model) {
+    public String listGoods(User user, Model model) {
         List<GoodsVo> goodsList = goodsService.listGoods();
         model.addAttribute("goodsList", goodsList);
+        model.addAttribute("user", user);
         return render(model, "goods_list");
     }
 
@@ -57,9 +59,10 @@ public class GoodsAction extends BaseAction {
      */
     @RequestMapping(value = "/listGoodsV2", produces = "text/html")
     @ResponseBody
-    public String listGoodsV2(Model model) {
+    public String listGoodsV2(Model model, User user) {
         List<GoodsVo> goodsList = goodsService.listGoods();
         model.addAttribute("goodsList", goodsList);
+        model.addAttribute("user", user);
         return renderV2(model, "goods_list", GoodsKey.goodListKey, "");
     }
 
@@ -74,7 +77,7 @@ public class GoodsAction extends BaseAction {
      */
     @RequestMapping(value = "/detail/{goodsId}")
     @ResponseBody
-    public ActionResult<GoodsDetailVo> detail(@PathVariable("goodsId") int goodsId) {
+    public ActionResult<GoodsDetailVo> detail(@PathVariable("goodsId") int goodsId, User user) {
         ActionResult<GoodsDetailVo> result = ActionResult.build();
         GoodsVo goodsVo = goodsService.getGoodsVoByGoodsId(goodsId);
         long startTime = goodsVo.getStartDate().getTime();
@@ -97,6 +100,7 @@ public class GoodsAction extends BaseAction {
         }
         GoodsDetailVo goodsDetailVo = new GoodsDetailVo();
         goodsDetailVo.setGoods(goodsVo);
+        goodsDetailVo.setUser(user);
         goodsDetailVo.setSekillStatus(seckillStatus.getStatus());
         goodsDetailVo.setRemainSeconds(remainSeconds);
         result.setData(goodsDetailVo);
