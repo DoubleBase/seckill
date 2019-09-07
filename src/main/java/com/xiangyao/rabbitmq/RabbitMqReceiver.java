@@ -2,6 +2,7 @@ package com.xiangyao.rabbitmq;
 
 import com.xiangyao.common.util.StringUtil;
 import com.xiangyao.domains.Order;
+import com.xiangyao.domains.SeckillOrder;
 import com.xiangyao.domains.User;
 import com.xiangyao.service.IGoodsService;
 import com.xiangyao.service.IOrderService;
@@ -45,12 +46,14 @@ public class RabbitMqReceiver {
 
         if (stock <= 0) {
             //库存不足
+            log.info("商品ID={},库存不足",goodsId);
             return;
         }
 
         //查询订单是否已创建
-        Order order = orderService.getSeckillOrderByUserIdAndGoodsId(user.getId(), goodsId);
+        SeckillOrder order = orderService.getSeckillOrderByUserIdAndGoodsId(user.getId(), goodsId);
         if (order != null) {
+            log.info("用户ID={}购买的商品ID={}的订单已存在",user.getId(),goodsId);
             return;
         }
 

@@ -13,8 +13,6 @@ import java.util.List;
  */
 public interface IGoodsService {
 
-    int deleteByGoodsId(int goodsId);
-
     int insert(Goods record);
 
     List<GoodsVo> listGoods();

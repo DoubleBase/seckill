@@ -72,10 +72,12 @@ public class SeckillServiceImpl implements ISeckillService {
         //减库存
         boolean result = goodsService.reduceStock(goodsVo);
         if (result) {
+            log.info("用户ID={},商品ID={},减库存成功,下订单",user.getId(),goodsVo.getId());
             //减库存成功，则下订单
             return orderService.createOrder(user,goodsVo);
         }else{
             //标记无库存
+            log.info("商品ID={},已经售完",goodsVo.getId());
             redisService.set(SeckillKey.isGoodsOver, "" + goodsVo.getId(), true);
             return null;
         }

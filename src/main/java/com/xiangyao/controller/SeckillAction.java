@@ -3,7 +3,7 @@ package com.xiangyao.controller;
 import com.xiangyao.common.action.BaseAction;
 import com.xiangyao.common.enums.ResultStatus;
 import com.xiangyao.common.result.ActionResult;
-import com.xiangyao.domains.Order;
+import com.xiangyao.domains.SeckillOrder;
 import com.xiangyao.domains.User;
 import com.xiangyao.rabbitmq.RabbitMqSender;
 import com.xiangyao.rabbitmq.SeckillMessage;
@@ -106,7 +106,7 @@ public class SeckillAction extends BaseAction implements InitializingBean {
             return result;
         }
         //检查订单是否存在,防止重复下单
-        Order order = orderService.getSeckillOrderByUserIdAndGoodsId(Long.parseLong(user.getNickname()), goodsId);
+        SeckillOrder order = orderService.getSeckillOrderByUserIdAndGoodsId(Long.parseLong(user.getNickname()), goodsId);
         if (order != null) {
             //订单已存在,重复秒杀
             result.withError(ResultStatus.SECKILL_REPEATE);
@@ -130,6 +130,24 @@ public class SeckillAction extends BaseAction implements InitializingBean {
         seckillMessage.setUser(user);
         seckillMessage.setGoodsId(goodsId);
         rabbitMqSender.sendSeckillMessage(seckillMessage);
+        return result;
+    }
+
+    /**
+     * 获取订单结果
+     * @param user
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping(value = "/result",method = RequestMethod.GET)
+    @ResponseBody
+    public ActionResult<Long> getOrderResult(User user, long goodsId){
+        ActionResult<Long> result = ActionResult.build();
+
+        SeckillOrder order = orderService.getSeckillOrderByUserIdAndGoodsId(Long.parseLong(user.getNickname()), goodsId);
+        if (order != null) {
+            result.setData(order.getOrderId());
+        }
         return result;
     }
 

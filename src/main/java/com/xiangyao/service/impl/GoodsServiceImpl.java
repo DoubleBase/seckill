@@ -23,11 +23,6 @@ public class GoodsServiceImpl implements IGoodsService {
     private GoodsMapper goodsMapper;
 
     @Override
-    public int deleteByGoodsId(int goodsId) {
-        return 0;
-    }
-
-    @Override
     public int insert(Goods record) {
         return goodsMapper.insert(record);
     }

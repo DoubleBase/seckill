@@ -29,7 +29,10 @@ public enum ResultStatus {
     VERIFY_CODE_ERROR(50002,"验证码错误"),
     SECKILL_ERROR(50003,"秒杀失败"),
     SECKILL_REPEATE(50004,"重复秒杀"),
-    SECKILL_OVER(50005,"商品秒杀结束")
+    SECKILL_OVER(50005,"商品秒杀结束"),
+
+    //订单信息
+    ORDER_NOT_EXIST(60001,"订单不存在")
     ;
 
     /**

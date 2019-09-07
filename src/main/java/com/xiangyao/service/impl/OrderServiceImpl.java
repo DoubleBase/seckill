@@ -31,8 +31,8 @@ public class OrderServiceImpl implements IOrderService {
     private RedisService redisService;
 
     @Override
-    public Order getSeckillOrderByUserIdAndGoodsId(long userId, long goodsId) {
-        return null;
+    public SeckillOrder getSeckillOrderByUserIdAndGoodsId(long userId, long goodsId) {
+        return redisService.get(OrderKey.getSeckillOrderByUidGid,userId+"_"+goodsId,SeckillOrder.class);
     }
 
     @Override
@@ -45,15 +45,20 @@ public class OrderServiceImpl implements IOrderService {
         order.setGoodsName(goodsVo.getGoodsName());
         order.setStatus(0);
         order.setUserId(Long.valueOf(user.getNickname()));
-        orderMapper.insertOrder(order);
+        long orderId = orderMapper.insertOrder(order);
 
         SeckillOrder seckillOrder = new SeckillOrder();
         seckillOrder.setGoodsId(order.getGoodsId());
-        seckillOrder.setOrderId(order.getOrderId());
+        seckillOrder.setOrderId(orderId);
         seckillOrder.setUserId(Long.valueOf(user.getNickname()));
         orderMapper.insertSeckillOrder(seckillOrder);
         String key = user.getNickname() + "_" + goodsVo.getId();
         redisService.set(OrderKey.getSeckillOrderByUidGid, key, seckillOrder);
         return order;
+    }
+
+    @Override
+    public Order getOrderById(long orderId) {
+        return orderMapper.getOrderById(orderId);
     }
 }

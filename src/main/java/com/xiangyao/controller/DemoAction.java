@@ -2,6 +2,8 @@ package com.xiangyao.controller;
 
 import com.xiangyao.common.action.BaseAction;
 import com.xiangyao.common.result.ActionResult;
+import com.xiangyao.rabbitmq.RabbitMqSender;
+import com.xiangyao.rabbitmq.SeckillMessage;
 import com.xiangyao.redis.RedisService;
 import com.xiangyao.redis.key.GoodsKey;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class DemoAction extends BaseAction {
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private RabbitMqSender rabbitMqSender;
 
     @GetMapping(value = "/addRedis")
     public ActionResult addRedis() {
@@ -43,6 +47,13 @@ public class DemoAction extends BaseAction {
         return result;
     }
 
+    @GetMapping(value = "/sendMsg")
+    public String sendMsg(){
+        SeckillMessage seckillMessage = new SeckillMessage();
+        seckillMessage.setGoodsId(10001L);
+        rabbitMqSender.sendSeckillMessage(seckillMessage);
+        return "OK";
+    }
 
 
 }

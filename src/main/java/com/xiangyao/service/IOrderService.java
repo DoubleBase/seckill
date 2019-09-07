@@ -1,6 +1,7 @@
 package com.xiangyao.service;
 
 import com.xiangyao.domains.Order;
+import com.xiangyao.domains.SeckillOrder;
 import com.xiangyao.domains.User;
 import com.xiangyao.vo.GoodsVo;
 
@@ -17,7 +18,7 @@ public interface IOrderService {
      * @param goodsId 商品ID
      * @return
      */
-    Order getSeckillOrderByUserIdAndGoodsId(long userId,long goodsId);
+    SeckillOrder getSeckillOrderByUserIdAndGoodsId(long userId, long goodsId);
 
     /**
      * 创建订单
@@ -25,4 +26,11 @@ public interface IOrderService {
      * @param goodsVo 商品
      */
     Order createOrder(User user, GoodsVo goodsVo);
+
+    /**
+     * 获取订单详情
+     * @param orderId
+     * @return
+     */
+    Order getOrderById(long orderId);
 }

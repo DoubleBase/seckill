@@ -36,6 +36,8 @@
             <groupId>org.springframework.amqp</groupId>
             <artifactId>spring-rabbit</artifactId>
         </dependency>
+
+
         <!--mysql-->
         <dependency>
             <groupId>mysql</groupId>

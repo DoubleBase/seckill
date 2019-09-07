@@ -15,6 +15,7 @@ import com.xiangyao.service.IUserService;
 import com.xiangyao.vo.LoginVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -89,7 +90,7 @@ public class UserServiceImpl implements IUserService {
     public boolean register(String username, String password, String salt) {
         User user = new User();
         user.setNickname(username);
-        String dbPassword = MD5Util.formPassToDBPass(password,salt);
+        String dbPassword = MD5Util.formPassToDBPass(password, salt);
         user.setPassword(dbPassword);
         user.setRegisterDate(new Date());
         user.setSalt(salt);
@@ -163,6 +164,18 @@ public class UserServiceImpl implements IUserService {
         user = userMapper.getUserByNickName(nickName);
         if (user != null) {
             redisService.set(UserKey.nickNameKey, "" + nickName, user);
+        }
+        return user;
+    }
+
+    @Override
+    public User getByToken(HttpServletResponse response, String token) {
+        if (StringUtils.isEmpty(token)) {
+            return null;
+        }
+        User user = redisService.get(UserKey.token, token, User.class);
+        if (user != null) {
+            addCookie(response, token, user);
         }
         return user;
     }

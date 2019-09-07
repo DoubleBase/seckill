@@ -1,5 +1,7 @@
 package com.xiangyao.common.util;
 
+import com.xiangyao.domains.User;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,6 +15,7 @@ public class RequestUtil {
 
     private static ThreadLocal<HttpServletRequest> requestThreadLocal = new ThreadLocal<>();
     private static ThreadLocal<HttpServletResponse> responseThreadLocal = new ThreadLocal<>();
+    private static ThreadLocal<User> userHolder = new ThreadLocal<>();
 
     public static void addHttpServletRequest(HttpServletRequest request){
         requestThreadLocal.set(request);
@@ -38,4 +41,15 @@ public class RequestUtil {
         responseThreadLocal.remove();
     }
 
+    public static void setUser(User user){
+        userHolder.set(user);
+    }
+
+    public static User getUser(){
+        return userHolder.get();
+    }
+
+    public static void removeUser(){
+        userHolder.remove();
+    }
 }

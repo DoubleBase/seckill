@@ -3,6 +3,7 @@ package com.xiangyao.service;
 import com.xiangyao.domains.User;
 import com.xiangyao.vo.LoginVo;
 
+import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 
 /**
@@ -23,4 +24,5 @@ public interface IUserService {
 
     User getUserByNickName(String nickname);
 
+    User getByToken(HttpServletResponse response,String token);
 }

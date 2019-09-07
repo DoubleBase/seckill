@@ -19,9 +19,6 @@ import org.springframework.stereotype.Service;
 public class RabbitMqSender {
 
     @Autowired
-    private AmqpTemplate amqpTemplate;
-
-    @Autowired
     private RabbitTemplate rabbitTemplate;
 
     /**
@@ -31,7 +28,7 @@ public class RabbitMqSender {
     public void sendSeckillMessage(SeckillMessage seckillMessage) {
         String msg = StringUtil.beanToString(seckillMessage);
         log.info("send msg : {}", msg);
-        amqpTemplate.convertAndSend(RabbitMQConfig.SECKILL_QUEUE, msg);
+        rabbitTemplate.convertAndSend(RabbitMQConfig.SECKILL_QUEUE, msg);
     }
 
 
